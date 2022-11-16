@@ -1,0 +1,27 @@
+CREATE TABLE episode4 (role STRING,lines STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+CREATE TABLE episode5 (role STRING,lines STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+CREATE TABLE episode6 (role STRING,lines STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
+LOAD DATA LOCAL INPATH '/root/ep04.txt' INTO TABLE episode4;
+LOAD DATA LOCAL INPATH '/root/ep05.txt' INTO TABLE episode5;
+LOAD DATA LOCAL INPATH '/root/ep06.txt' INTO TABLE episode6;
+
+--Export to HDFS
+INSERT OVERWRITE DIRECTORY '/user/poojahk/HiveOutput4/' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+SELECT role, count(lines) AS numlines FROM episode4 GROUP BY role ORDER BY numlines desc;
+
+INSERT OVERWRITE DIRECTORY '/user/poojahk/HiveOutput5/' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+SELECT role, count(lines) AS numlines FROM episode5 GROUP BY role ORDER BY numlines desc;
+
+INSERT OVERWRITE DIRECTORY '/user/poojahk/HiveOutput6/' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+SELECT role, count(lines) AS numlines FROM episode6 GROUP BY role ORDER BY numlines desc;
+
+--Export to local
+INSERT OVERWRITE LOCAL DIRECTORY '/root/HiveOutput4/' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+SELECT role, count(lines) AS numlines FROM episode4 GROUP BY role ORDER BY numlines desc;
+
+INSERT OVERWRITE LOCAL DIRECTORY '/root/HiveOutput5/' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+SELECT role, count(lines) AS numlines FROM episode5 GROUP BY role ORDER BY numlines desc;
+
+INSERT OVERWRITE LOCAL DIRECTORY '/root/HiveOutput6/' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+SELECT role, count(lines) AS numlines FROM episode6 GROUP BY role ORDER BY numlines desc;
